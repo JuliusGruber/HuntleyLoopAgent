@@ -2,30 +2,35 @@
 
 ## Summary
 
-The user provides a task via the command line and the agent streams its work to the terminal.
+The agent presents an interactive conversational CLI where the user types messages and the agent responds, maintaining context across turns.
 
 ## Context
 
-The agent needs a way to receive work from the user and show progress as it operates. Since this is a minimal agent, the interface is a simple command-line program — no GUI, no web server, no REPL. The user runs the agent with a task and watches it work.
+The agent is a conversational coding assistant, similar to Claude Code. The user launches the agent and enters a REPL-style loop: they type a message, the agent works (calling tools as needed), displays its response, and waits for the next message. Conversation history is maintained across turns within a session.
 
 ## Acceptance Criteria
 
-- The agent accepts the user's task as a command-line argument or via standard input.
+- The agent starts and displays a prompt, waiting for user input.
+- The user types a message and presses Enter to send it.
 - The agent streams the LLM's text responses to the terminal as they are generated (not buffered until the end).
 - Tool invocations are visible to the user — the agent prints which tool is being called and with what parameters.
 - Tool results are visible to the user — the agent prints the output returned by each tool.
-- When the agent finishes, the final response from the LLM is clearly presented.
-- If no task is provided, the agent prints a usage message and exits.
+- After the agent finishes responding, the prompt reappears for the next user message.
+- The full conversation history (all user and assistant messages) is sent to the API on each turn, so the LLM has context from prior turns.
+- The user can exit the session by typing "exit", "quit", or pressing Ctrl+C.
+- If the API key is missing or invalid, the agent reports a clear error on startup before showing the prompt.
 
 ## Edge Cases
 
-- The user provides an extremely long task string — the agent passes it to the API as-is (the API will reject if it exceeds limits).
-- The user interrupts the agent (e.g., Ctrl+C) — the agent exits cleanly without leaving orphan processes.
-- The API key is missing or invalid — the agent reports a clear error before starting the loop.
+- The user sends an empty message (just presses Enter) — the agent ignores it and shows the prompt again.
+- The user interrupts the agent mid-response (Ctrl+C) — the agent stops the current response and returns to the prompt (does not exit the session).
+- A second Ctrl+C while at the prompt exits the session.
+- Conversation grows beyond API context limits — the agent reports the error and continues the session (the user can start a new topic).
 
 ## Out of Scope
 
-- Interactive multi-turn conversation (the agent handles one task per invocation).
+- Conversation persistence across sessions (history is lost when the agent exits).
 - Rich terminal UI (colors, progress bars, spinners).
-- Configuration files or command-line flags beyond the task input.
+- Configuration files or command-line flags.
 - Logging to files.
+- Slash commands or special input syntax.
