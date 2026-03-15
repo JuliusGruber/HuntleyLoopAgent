@@ -10,7 +10,7 @@ The agent loop is the central orchestrator of the coding agent. It manages the b
 
 ## Acceptance Criteria
 
-- The agent sends the user's task to the Anthropic API as the initial message.
+- The agent sends the user's message and full conversation history to the Anthropic API.
 - When the LLM responds with a tool-use request, the agent executes the requested tool and sends the result back to the LLM as a tool-result message.
 - When the LLM responds with multiple tool-use requests in a single response, the agent executes each one and sends all results back.
 - The loop continues until the LLM responds with a final text message that contains no tool-use requests.
@@ -27,7 +27,6 @@ The agent loop is the central orchestrator of the coding agent. It manages the b
 
 ## Out of Scope
 
-- Multi-turn conversation memory beyond a single task session.
 - Retry or backoff logic for transient API failures.
-- Streaming of partial LLM responses (streaming is covered in User Interaction).
 - The internal behavior of individual tools (each has its own spec).
+- Conversation history management (covered in User Interaction).

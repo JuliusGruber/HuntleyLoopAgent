@@ -2,37 +2,36 @@
 
 ## Source Directories
 
-- Main source: project root (Go source files at top level or in `cmd/`, `internal/`)
+- Main source: `ralphLoop/src/`
 
 ## Build & Run
 
 ```bash
+# Install dependencies
+npm install
+
 # Build
-go build ./...
+npx tsc
 
 # Run
-go run .
+npx tsx ralphLoop/src/index.ts
 ```
 
 ## Validation
 
 ```bash
-# Tests
-go test ./...
+# Type checking
+npx tsc --noEmit
 
-# Type checking / vet
-go vet ./...
-
-# Linting (if golangci-lint is available)
-golangci-lint run || true
+# Linting (if eslint is available)
+npx eslint ralphLoop/src/ || true
 ```
 
 ## Operational Notes
 
 ## Codebase Patterns
 
-- Language: Go
-- Dependencies managed via Go modules (`go.mod`)
-- Uses the Anthropic SDK for Go
-- Standard Go project layout
+- Language: TypeScript
+- Dependencies managed via npm (`package.json`)
+- Uses the Anthropic SDK (`@anthropic-ai/sdk`)
 - One concern per file
