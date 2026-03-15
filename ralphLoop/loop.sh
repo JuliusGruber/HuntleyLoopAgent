@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Ensure claude CLI is on PATH (Windows installs to ~/.local/bin)
+export PATH="$HOME/.local/bin:$PATH"
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 MODE="${1:-build}"                    # "plan", "build", or "specs"
 MAX_ITERS="${2:-0}"                   # 0 = infinite
