@@ -16,12 +16,13 @@
 - **Task 12** — End-to-end validation ✅
 - **Task 13** — Tool result quality improvements (isError propagation, binary detection, large file safety) ✅
 - **Task 14** — Ctrl+C abort signal checks between tool dispatches in agent loop ✅
+- **Task 15** — Double Ctrl+C at prompt to exit (spec compliance) ✅
 
 ---
 
 ## Remaining Tasks
 
-No remaining tasks. All 14 tasks are complete.
+No remaining tasks. All 15 tasks are complete.
 
 ---
 

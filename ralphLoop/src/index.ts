@@ -71,15 +71,22 @@ async function main(): Promise<void> {
     });
   }
 
-  // Handle Ctrl+C
+  // Handle Ctrl+C — double-press at prompt to exit (per spec)
+  let lastSigint = 0;
   process.on("SIGINT", () => {
     if (isRunning && abortController) {
       // Mid-response: abort the current request
       abortController.abort();
     } else {
-      // At prompt: exit
-      console.log("\nGoodbye!");
-      process.exit(0);
+      // At prompt: require two presses within 1.5s to exit
+      const now = Date.now();
+      if (now - lastSigint < 1500) {
+        console.log("\nGoodbye!");
+        process.exit(0);
+      }
+      lastSigint = now;
+      console.log("\n(Press Ctrl+C again to exit, or type exit/quit)");
+      prompt();
     }
   });
 
