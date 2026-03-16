@@ -1,6 +1,4 @@
-# HuntleyLoopAgent
-
-This project was a test run for [HuntleysLoop](https://github.com/JuliusGruber/HuntleysLoop).
+This project was a test run for [HuntleysLoop](https://github.com/JuliusGruber/HuntleysLoop), an implementation of [ralphWiggums loop](https://github.com/ghuntley/how-to-ralph-wiggum).
 
 ## How it was built
 
