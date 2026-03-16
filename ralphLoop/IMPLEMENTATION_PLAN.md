@@ -15,12 +15,13 @@
 - **Task 11** — Conversational CLI / REPL (`index.ts`) ✅
 - **Task 12** — End-to-end validation ✅
 - **Task 13** — Tool result quality improvements (isError propagation, binary detection, large file safety) ✅
+- **Task 14** — Ctrl+C abort signal checks between tool dispatches in agent loop ✅
 
 ---
 
 ## Remaining Tasks
 
-No remaining tasks. All 13 tasks are complete.
+No remaining tasks. All 14 tasks are complete.
 
 ---
 
@@ -47,4 +48,4 @@ No remaining tasks. All 13 tasks are complete.
 
 ## Known Limitations
 
-- **`spawnSync` blocks the event loop:** During bash command execution (up to 120s timeout), Ctrl+C cannot interrupt because `spawnSync` blocks the Node.js event loop. Fixing this would require converting the entire tool dispatch system to async with `spawn`. The spec's Ctrl+C requirement applies to LLM streaming responses, which does work correctly.
+- **`spawnSync` blocks the event loop:** During a single bash command execution (up to 120s timeout), Ctrl+C cannot interrupt because `spawnSync` blocks the Node.js event loop. Fixing this would require converting the entire tool dispatch system to async with `spawn`. Ctrl+C now works correctly between tool dispatches (multi-tool responses) and before API calls, so the gap is limited to within a single blocking `spawnSync` call.

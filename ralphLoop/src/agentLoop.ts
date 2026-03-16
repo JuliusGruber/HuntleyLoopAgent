@@ -14,6 +14,13 @@ export async function runAgentLoop(
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
+    // Bail early if the user interrupted (Ctrl+C) before the next API call
+    if (signal?.aborted) {
+      const err = new Error("Aborted");
+      err.name = "AbortError";
+      throw err;
+    }
+
     const stream = client.messages.stream(
       {
         model,
@@ -58,6 +65,13 @@ export async function runAgentLoop(
     const toolResults: Anthropic.ToolResultBlockParam[] = [];
 
     for (const toolBlock of toolUseBlocks) {
+      // Check if the user interrupted (Ctrl+C) between tool dispatches
+      if (signal?.aborted) {
+        const err = new Error("Aborted");
+        err.name = "AbortError";
+        throw err;
+      }
+
       console.log(`\n[Tool: ${toolBlock.name}]`, JSON.stringify(toolBlock.input));
 
       const result = dispatch(
