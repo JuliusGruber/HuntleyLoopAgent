@@ -1,40 +1,45 @@
 import { readdirSync, statSync } from "node:fs";
 
-export function listFiles(path: string): string {
+export interface ListFilesResult {
+  content: string;
+  isError: boolean;
+}
+
+export function listFiles(path: string): ListFilesResult {
   const targetPath = !path || path.trim() === "" ? process.cwd() : path;
 
   try {
     const stat = statSync(targetPath);
     if (!stat.isDirectory()) {
-      return `Error: '${targetPath}' is not a directory.`;
+      return { content: `Error: '${targetPath}' is not a directory.`, isError: true };
     }
   } catch (err: unknown) {
     if (isNodeError(err) && err.code === "ENOENT") {
-      return `Error: Path not found: '${targetPath}'.`;
+      return { content: `Error: Path not found: '${targetPath}'.`, isError: true };
     }
     if (isNodeError(err) && err.code === "EACCES") {
-      return `Error: Permission denied: '${targetPath}'.`;
+      return { content: `Error: Permission denied: '${targetPath}'.`, isError: true };
     }
-    return `Error: ${String(err)}`;
+    return { content: `Error: ${String(err)}`, isError: true };
   }
 
   try {
     const entries = readdirSync(targetPath, { withFileTypes: true });
 
     if (entries.length === 0) {
-      return "Directory is empty.";
+      return { content: "Directory is empty.", isError: false };
     }
 
     const sorted = entries
       .map((entry) => (entry.isDirectory() ? `${entry.name}/` : entry.name))
       .sort();
 
-    return sorted.join("\n");
+    return { content: sorted.join("\n"), isError: false };
   } catch (err: unknown) {
     if (isNodeError(err) && err.code === "EACCES") {
-      return `Error: Permission denied: '${targetPath}'.`;
+      return { content: `Error: Permission denied: '${targetPath}'.`, isError: true };
     }
-    return `Error: ${String(err)}`;
+    return { content: `Error: ${String(err)}`, isError: true };
   }
 }
 

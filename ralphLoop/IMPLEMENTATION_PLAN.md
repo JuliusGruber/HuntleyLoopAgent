@@ -14,12 +14,13 @@
 - **Task 10** — Agent loop (`agentLoop.ts`) ✅
 - **Task 11** — Conversational CLI / REPL (`index.ts`) ✅
 - **Task 12** — End-to-end validation ✅
+- **Task 13** — Tool result quality improvements (isError propagation, binary detection, large file safety) ✅
 
 ---
 
 ## Remaining Tasks
 
-No remaining tasks. All 12 tasks are complete.
+No remaining tasks. All 13 tasks are complete.
 
 ---
 
@@ -33,6 +34,7 @@ No remaining tasks. All 12 tasks are complete.
 
 - ESLint not configured in project — `npx eslint ralphLoop/src/ || true` fails gracefully as expected per AGENTS.md.
 - `npx tsc --noEmit` requires at least one `.ts` file in the include path — can't validate an empty `src/` directory.
+- Tool functions now return `{ content, isError }` structs instead of plain strings, so the dispatcher propagates `is_error` to the API. Bash tool sets `isError` based on exit code (non-zero = error).
 
 ## Bugs Fixed in Task 12
 

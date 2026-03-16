@@ -3,9 +3,14 @@ import { spawnSync } from "node:child_process";
 const TIMEOUT_MS = 120_000;
 const MAX_OUTPUT_BYTES = 100 * 1024;
 
-export function executeBash(command: string): string {
+export interface BashResult {
+  content: string;
+  isError: boolean;
+}
+
+export function executeBash(command: string): BashResult {
   if (!command || command.trim() === "") {
-    return "Error: No command provided.";
+    return { content: "Error: No command provided.", isError: true };
   }
 
   const result = spawnSync(command, {
@@ -18,9 +23,9 @@ export function executeBash(command: string): string {
 
   if (result.error) {
     if (result.error.message.includes("ETIMEDOUT") || result.error.message.includes("timed out")) {
-      return `Error: Command timed out after ${TIMEOUT_MS / 1000} seconds.`;
+      return { content: `Error: Command timed out after ${TIMEOUT_MS / 1000} seconds.`, isError: true };
     }
-    return `Error: ${result.error.message}`;
+    return { content: `Error: ${result.error.message}`, isError: true };
   }
 
   let output = (result.stdout ?? "") + (result.stderr ?? "");
@@ -31,8 +36,8 @@ export function executeBash(command: string): string {
   }
 
   if (output.trim() === "") {
-    return `Command completed with exit code ${exitCode}.`;
+    return { content: `Command completed with exit code ${exitCode}.`, isError: exitCode !== 0 };
   }
 
-  return `${output}\n\nExit code: ${exitCode}`;
+  return { content: `${output}\n\nExit code: ${exitCode}`, isError: exitCode !== 0 };
 }

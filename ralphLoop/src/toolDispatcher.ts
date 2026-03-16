@@ -14,19 +14,16 @@ export function dispatch(
 ): DispatchResult {
   switch (toolName) {
     case "bash":
-      return { content: executeBash(String(input.command ?? "")), isError: false };
+      return executeBash(String(input.command ?? ""));
     case "list_files":
-      return { content: listFiles(String(input.path ?? "")), isError: false };
+      return listFiles(String(input.path ?? ""));
     case "read_file":
-      return { content: readFile(String(input.file_path ?? "")), isError: false };
+      return readFile(String(input.file_path ?? ""));
     case "write_file":
-      return {
-        content: writeFile(
-          String(input.file_path ?? ""),
-          input.content != null ? String(input.content) : ""
-        ),
-        isError: false,
-      };
+      return writeFile(
+        String(input.file_path ?? ""),
+        input.content != null ? String(input.content) : ""
+      );
     default:
       return { content: `Unknown tool: ${toolName}`, isError: true };
   }

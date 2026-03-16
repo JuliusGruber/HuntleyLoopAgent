@@ -1,9 +1,14 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 
-export function writeFile(filePath: string, content: string): string {
+export interface WriteFileResult {
+  content: string;
+  isError: boolean;
+}
+
+export function writeFile(filePath: string, content: string): WriteFileResult {
   if (!filePath || filePath.trim() === "") {
-    return "Error: No file path provided.";
+    return { content: "Error: No file path provided.", isError: true };
   }
 
   try {
@@ -11,15 +16,15 @@ export function writeFile(filePath: string, content: string): string {
     mkdirSync(dir, { recursive: true });
     writeFileSync(filePath, content, "utf-8");
     const bytes = Buffer.byteLength(content, "utf-8");
-    return `Wrote ${bytes} bytes to ${filePath}`;
+    return { content: `Wrote ${bytes} bytes to ${filePath}`, isError: false };
   } catch (err: unknown) {
     if (isNodeError(err) && err.code === "EACCES") {
-      return `Error: Permission denied: '${filePath}'.`;
+      return { content: `Error: Permission denied: '${filePath}'.`, isError: true };
     }
     if (isNodeError(err) && err.code === "ENOSPC") {
-      return `Error: Disk full, could not write to '${filePath}'.`;
+      return { content: `Error: Disk full, could not write to '${filePath}'.`, isError: true };
     }
-    return `Error: ${String(err)}`;
+    return { content: `Error: ${String(err)}`, isError: true };
   }
 }
 
