@@ -218,7 +218,7 @@
 **What:**
 - Create `ralphLoop/src/agentLoop.ts`
 - Export async function: `runAgentLoop(messages: Message[], signal?: AbortSignal): Promise<Message[]>`
-- Use Anthropic SDK streaming: `client.messages.stream()` with system prompt, tools, model, and message history
+- Use Anthropic SDK streaming: `client.messages.stream()` with system prompt, tools, model, `max_tokens: 8192`, and message history
 - Stream text tokens to stdout as they arrive (acceptance criteria 3 of `user_interaction.md`)
 - Collect `tool_use` content blocks; after full response completes:
   - Print tool name + parameters to stdout (acceptance criteria 4 of `user_interaction.md`)
