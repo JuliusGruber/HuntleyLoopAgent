@@ -12,7 +12,6 @@ export async function runAgentLoop(
 ): Promise<Message[]> {
   const updated = [...messages];
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     // Bail early if the user interrupted (Ctrl+C) before the next API call
     if (signal?.aborted) {

@@ -20,12 +20,13 @@
 - **Task 16** — Unit test suite (vitest: 34 tests across bash, listFiles, readFile, writeFile, toolDispatcher) ✅
 - **Task 17** — Defensive try-catch around tool dispatch in agent loop ✅
 - **Task 18** — agentLoop test suite (14 tests) + bash maxBuffer spec compliance fix ✅
+- **Task 19** — ESLint configuration (flat config for ESLint v9 + typescript-eslint) ✅
 
 ---
 
 ## Remaining Tasks
 
-No remaining tasks. All 18 tasks are complete.
+No remaining tasks. All 19 tasks are complete.
 
 ---
 
@@ -37,7 +38,7 @@ No remaining tasks. All 18 tasks are complete.
 
 ## Learnings
 
-- ESLint not configured in project — `npx eslint ralphLoop/src/ || true` fails gracefully as expected per AGENTS.md.
+- ESLint now configured with flat config (`eslint.config.mjs`). Uses ESLint v9 (not v10) because Node 18 lacks `util.styleText` required by ESLint v10.
 - `npx tsc --noEmit` requires at least one `.ts` file in the include path — can't validate an empty `src/` directory.
 - Tool functions now return `{ content, isError }` structs instead of plain strings, so the dispatcher propagates `is_error` to the API. Bash tool sets `isError` based on exit code (non-zero = error).
 

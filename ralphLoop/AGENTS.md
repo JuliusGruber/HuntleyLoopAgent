@@ -26,8 +26,8 @@ npm test
 # Type checking
 npx tsc --noEmit
 
-# Linting (if eslint is available)
-npx eslint ralphLoop/src/ || true
+# Linting
+npx eslint ralphLoop/src/
 ```
 
 ## Operational Notes
