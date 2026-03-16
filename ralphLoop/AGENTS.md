@@ -2,7 +2,7 @@
 
 ## Source Directories
 
-- Main source: `ralphLoop/src/`
+- Main source: `src/`
 
 ## Build & Run
 
@@ -14,7 +14,7 @@ npm install
 npx tsc
 
 # Run
-npx tsx ralphLoop/src/index.ts
+npx tsx src/index.ts
 ```
 
 ## Validation
@@ -27,7 +27,7 @@ npm test
 npx tsc --noEmit
 
 # Linting
-npx eslint ralphLoop/src/
+npx eslint src/
 ```
 
 ## Operational Notes
@@ -38,5 +38,5 @@ npx eslint ralphLoop/src/
 - Dependencies managed via npm (`package.json`)
 - Uses the Anthropic SDK (`@anthropic-ai/sdk`)
 - One concern per file
-- Tests use vitest, located in `ralphLoop/src/__tests__/`
+- Tests use vitest, located in `src/__tests__/`
 - Test files named `<module>.test.ts` matching the source module they cover
