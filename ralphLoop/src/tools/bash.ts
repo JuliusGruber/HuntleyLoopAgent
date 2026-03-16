@@ -18,7 +18,7 @@ export function executeBash(command: string): BashResult {
     timeout: TIMEOUT_MS,
     cwd: process.cwd(),
     encoding: "utf-8",
-    maxBuffer: MAX_OUTPUT_BYTES * 2,
+    maxBuffer: 10 * 1024 * 1024, // 10MB — let string truncation at MAX_OUTPUT_BYTES be the effective limit
   });
 
   if (result.error) {

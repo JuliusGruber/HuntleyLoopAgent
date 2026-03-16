@@ -19,12 +19,13 @@
 - **Task 15** — Double Ctrl+C at prompt to exit (spec compliance) ✅
 - **Task 16** — Unit test suite (vitest: 34 tests across bash, listFiles, readFile, writeFile, toolDispatcher) ✅
 - **Task 17** — Defensive try-catch around tool dispatch in agent loop ✅
+- **Task 18** — agentLoop test suite (14 tests) + bash maxBuffer spec compliance fix ✅
 
 ---
 
 ## Remaining Tasks
 
-No remaining tasks. All 17 tasks are complete.
+No remaining tasks. All 18 tasks are complete.
 
 ---
 
@@ -52,3 +53,8 @@ No remaining tasks. All 17 tasks are complete.
 ## Known Limitations
 
 - **`spawnSync` blocks the event loop:** During a single bash command execution (up to 120s timeout), Ctrl+C cannot interrupt because `spawnSync` blocks the Node.js event loop. Fixing this would require converting the entire tool dispatch system to async with `spawn`. Ctrl+C now works correctly between tool dispatches (multi-tool responses) and before API calls, so the gap is limited to within a single blocking `spawnSync` call.
+
+## Learnings (Task 18)
+
+- Bash `maxBuffer` was set to `MAX_OUTPUT_BYTES * 2` (200KB). When a command's stdout exceeded this, `spawnSync` killed the process and returned an error instead of truncating. Spec requires truncation. Fixed by raising `maxBuffer` to 10MB and relying on the 100KB string-level truncation.
+- agentLoop mocking strategy: mock `client.messages.stream` to return objects with `.on()` and `.finalMessage()` methods, mock `dispatch` separately. Tests cover: text-only, empty response, tool dispatch, multiple tools, isError propagation, dispatch crashes, abort signals, immutability, streaming, API params, logging, log truncation, and mixed content.
