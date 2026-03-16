@@ -20,6 +20,9 @@ npx tsx ralphLoop/src/index.ts
 ## Validation
 
 ```bash
+# Tests
+npm test
+
 # Type checking
 npx tsc --noEmit
 
@@ -35,3 +38,5 @@ npx eslint ralphLoop/src/ || true
 - Dependencies managed via npm (`package.json`)
 - Uses the Anthropic SDK (`@anthropic-ai/sdk`)
 - One concern per file
+- Tests use vitest, located in `ralphLoop/src/__tests__/`
+- Test files named `<module>.test.ts` matching the source module they cover
