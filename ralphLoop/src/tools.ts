@@ -29,7 +29,7 @@ export const toolDefinitions: Anthropic.Tool[] = [
             "The directory path to list. Defaults to the current working directory if empty.",
         },
       },
-      required: ["path"],
+      required: [],
     },
   },
   {

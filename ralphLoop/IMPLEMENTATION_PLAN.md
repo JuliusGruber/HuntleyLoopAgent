@@ -13,42 +13,15 @@
 - **Task 9** — System prompt (`systemPrompt.ts`) ✅
 - **Task 10** — Agent loop (`agentLoop.ts`) ✅
 - **Task 11** — Conversational CLI / REPL (`index.ts`) ✅
+- **Task 12** — End-to-end validation ✅
 
 ---
 
 ## Remaining Tasks
 
-### 12. End-to-end validation
-
-**Why:** Integration test — all pieces working together as a real agent. Catches issues not visible when building modules individually.
-
-**What:**
-- `npx tsc --noEmit` passes with zero errors ✅ (verified)
-- `npx tsx ralphLoop/src/index.ts` starts and validates auth
-- Agent displays prompt and waits for input
-- Send a message → streamed text response appears token-by-token
-- Send a task requiring tools → tool name/params printed → results printed → conversation continues
-- Multiple tool calls in one response handled correctly
-- Empty input ignored, prompt reappears
-- `"exit"` exits cleanly
-- `"quit"` exits cleanly
-- Ctrl+C mid-response returns to prompt
-- Ctrl+C at prompt exits
-- Conversation context maintained across turns (agent remembers prior messages)
-- Fix any issues discovered
-
-**Done when:** All verifications above pass. The agent handles multi-turn conversation with tool use and exits cleanly via all methods.
-
-**Dependencies:** Task 11 (done).
+No remaining tasks. All 12 tasks are complete.
 
 ---
-
-## Dependency Graph
-
-```
-Task 1–11: ALL DONE ✅
-  └── Task 12 (E2E validation) — NEXT
-```
 
 ## Design Decisions
 
@@ -60,3 +33,16 @@ Task 1–11: ALL DONE ✅
 
 - ESLint not configured in project — `npx eslint ralphLoop/src/ || true` fails gracefully as expected per AGENTS.md.
 - `npx tsc --noEmit` requires at least one `.ts` file in the include path — can't validate an empty `src/` directory.
+
+## Bugs Fixed in Task 12
+
+- **Ctrl+C orphaned user message (HIGH):** After aborting mid-response, the user's message remained in history without an assistant reply, causing consecutive `user` messages that break the API. Fixed by popping the orphaned message in the catch block.
+- **Unknown tool results not marked as errors (MEDIUM):** `dispatch()` returned plain strings for unknown tools. The API's `is_error` field was never set, so the LLM couldn't distinguish errors from successes. Fixed by returning a `DispatchResult` with `isError` flag.
+- **`list_files` path incorrectly required (MEDIUM):** The JSON schema marked `path` as required, but the spec says omitting it should default to cwd. Fixed by making it optional.
+- **Unsafe `as string` casts in dispatcher (MEDIUM):** Non-string or undefined inputs would pass through silently. Fixed by using `String(input.x ?? "")` with null coalescing.
+- **`writeFile` undefined content (MEDIUM):** If the LLM omitted `content`, `undefined` would be written as the literal string `"undefined"`. Fixed by defaulting to empty string.
+- **Context limit detection too narrow (LOW):** Only matched "context" in error messages. Extended to also match "too long" and "token" variants.
+
+## Known Limitations
+
+- **`spawnSync` blocks the event loop:** During bash command execution (up to 120s timeout), Ctrl+C cannot interrupt because `spawnSync` blocks the Node.js event loop. Fixing this would require converting the entire tool dispatch system to async with `spawn`. The spec's Ctrl+C requirement applies to LLM streaming responses, which does work correctly.

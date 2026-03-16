@@ -43,12 +43,18 @@ async function main(): Promise<void> {
         messages.length = 0;
         messages.push(...updated);
       } catch (err: unknown) {
+        // Remove the orphaned user message so the next turn doesn't
+        // produce consecutive user messages (which the API rejects).
+        messages.pop();
+
         if (err instanceof Error && err.name === "AbortError") {
           console.log("\n[Interrupted]");
         } else if (
           err instanceof Anthropic.APIError &&
           err.status === 400 &&
-          err.message.includes("context")
+          (err.message.includes("context") ||
+            err.message.includes("too long") ||
+            err.message.includes("token"))
         ) {
           console.error(
             "\nError: Conversation has exceeded the model's context limit. Please start a new topic."

@@ -65,12 +65,13 @@ export async function runAgentLoop(
         toolBlock.input as Record<string, unknown>
       );
 
-      console.log(`[Result]`, result.length > 500 ? result.slice(0, 500) + "..." : result);
+      console.log(`[Result]`, result.content.length > 500 ? result.content.slice(0, 500) + "..." : result.content);
 
       toolResults.push({
         type: "tool_result",
         tool_use_id: toolBlock.id,
-        content: result,
+        content: result.content,
+        ...(result.isError ? { is_error: true } : {}),
       });
     }
 
