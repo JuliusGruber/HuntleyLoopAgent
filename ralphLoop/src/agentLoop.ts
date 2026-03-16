@@ -74,10 +74,18 @@ export async function runAgentLoop(
 
       console.log(`\n[Tool: ${toolBlock.name}]`, JSON.stringify(toolBlock.input));
 
-      const result = dispatch(
-        toolBlock.name,
-        toolBlock.input as Record<string, unknown>
-      );
+      let result;
+      try {
+        result = dispatch(
+          toolBlock.name,
+          toolBlock.input as Record<string, unknown>
+        );
+      } catch (dispatchErr: unknown) {
+        result = {
+          content: `Internal error executing tool '${toolBlock.name}': ${String(dispatchErr)}`,
+          isError: true,
+        };
+      }
 
       console.log(`[Result]`, result.content.length > 500 ? result.content.slice(0, 500) + "..." : result.content);
 

@@ -18,12 +18,13 @@
 - **Task 14** — Ctrl+C abort signal checks between tool dispatches in agent loop ✅
 - **Task 15** — Double Ctrl+C at prompt to exit (spec compliance) ✅
 - **Task 16** — Unit test suite (vitest: 34 tests across bash, listFiles, readFile, writeFile, toolDispatcher) ✅
+- **Task 17** — Defensive try-catch around tool dispatch in agent loop ✅
 
 ---
 
 ## Remaining Tasks
 
-No remaining tasks. All 16 tasks are complete.
+No remaining tasks. All 17 tasks are complete.
 
 ---
 
